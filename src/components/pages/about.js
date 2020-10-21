@@ -5,3 +5,4 @@ export const about = () => {
         <Fragment>Empty Page</Fragment>
     )
 }
+ 
