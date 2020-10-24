@@ -11,7 +11,7 @@ import { about } from './components/pages/about';
 import User from './components/users/User';
 
 class App extends Component {
-  state = { users: [], user: {}, loading: false, alert: null };
+  state = { users: [], user: {}, loading: false, alert: null, repos: [] };
 
   searchUsers = async (text) => {
     this.setState({ loading: true });
@@ -33,6 +33,16 @@ class App extends Component {
 
     this.setState({ user: res.data, loading: false });
   };
+  // get users repos
+  getUserRepos = async (username) => {
+    this.setState({ loading: true });
+    const res = await axios.get(
+      `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}
+      &client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
+
+    this.setState({ repos: res.data, loading: false });
+  };
 
   setAlert = (msg, type) => {
     this.setState({ alert: { msg: msg, type: type } });
@@ -40,7 +50,7 @@ class App extends Component {
     setTimeout(() => this.setState({ alert: null }), 5000);
   };
   render() {
-    const { users, loading, user } = this.state;
+    const { users, loading, user, repos } = this.state;
 
     return (
       <BrowserRouter>
@@ -75,6 +85,8 @@ class App extends Component {
                   <User
                     {...props}
                     getUser={this.getUser}
+                    getUserRepos={this.getUserRepos}
+                    repos={repos}
                     user={user}
                     loading={loading}
                   />
