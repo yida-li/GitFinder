@@ -1,18 +1,25 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import Spinner from '../layout/Spinner';
+import { Link } from 'react-router-dom';
 
 export class User extends Component {
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);
   }
 
-  static propTypes = {};
+  static propTypes = {
+    loading: PropTypes.bool,
+    user: PropTypes.object.isRequired,
+    getUser: PropTypes.func.isRequired,
+  };
 
   render() {
     const {
       name,
       avatar_url,
       location,
+      company,
       bio,
       blog,
       login,
@@ -25,8 +32,85 @@ export class User extends Component {
     } = this.props.user;
 
     const { loading } = this.props;
-    console.log({ name });
-    return <div> USER R {name} </div>;
+
+    if (loading) return <Spinner />;
+    else
+      return (
+        <Fragment>
+          <Link to='/' className='btn btn-light'>
+            Back to Search
+          </Link>
+          Hireable:{' '}
+          {hireable ? (
+            <i className='fas fa-check text-success' />
+          ) : (
+            <i className='fas fa-times-circle text-danger' />
+          )}
+          <div className='card grid-2'>
+            <div className='all-center'>
+              <img
+                src={avatar_url}
+                className='round-img'
+                alt=''
+                style={{ width: '150px' }}
+              />
+
+              <h1>{name}</h1>
+              <p>Location: {location}</p>
+            </div>
+            <div>
+              {bio && (
+                <Fragment>
+                  <h3>Bio</h3>
+                  <p>{bio}</p>
+                </Fragment> // The reason why brad keeps using fragments: Fragments always exist within the context of a given Activity and can always access that Activity. By storing the information of interest within the Activity, the Fragment for each screen can simply access the object reference through the Activity
+              )}
+
+              <a href={html_url} className='btn btn-dark my-1'>
+                View CV
+              </a>
+              <ul>
+                <li>
+                  {login && (
+                    <Fragment>
+                      <strong>Username:</strong>
+                      {login}
+                    </Fragment>
+                  )}
+                </li>
+                <li>
+                  {company && (
+                    <Fragment>
+                      <strong>Company:</strong>
+                      {company}
+                    </Fragment>
+                  )}
+                </li>
+                <li>
+                  {blog && (
+                    <Fragment>
+                      <strong>Website:</strong>
+                      {blog}
+                    </Fragment>
+                  )}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className='card text-center'>
+            <div className='badge badge-primary'> Followers :{followers}</div>
+            <div className='badge badge-success'> Following :{following}</div>
+            <div className='badge badge-light'>
+              {' '}
+              Public Gist :{public_gists}
+            </div>
+            <div className='badge badge-dark'>
+              {' '}
+              Public Repos :{public_repos}
+            </div>
+          </div>
+        </Fragment>
+      );
   }
 }
 
