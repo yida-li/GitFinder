@@ -10,6 +10,10 @@
 
 # production
 /build
+/deployLog
+/tempDeployResource
+/frameworkLoader
+/
 
 # misc
 .DS_Store
