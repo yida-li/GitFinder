@@ -1,2 +1,2 @@
-#JUST AN UNFINISHED TRACKER TO FIND SATOSHI NAKAMOTO
+# Just an unfinished prototype for [ENIGMA](https://github.com/ai-gorithm-js/Enigma) 
 
